@@ -1,65 +1,29 @@
-<!--サイドバーあり-->
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>test6</title>
-  <style>
-    body{
-        margin: 0;
-        padding: 0;
-        display: flex;
-        height: 100vh;
-    }
-    #sidebar {
-        width: 300px;
-        overflow-y: auto;
-        border-right: 1px solid #ccc;
-        padding: 10px;
-        box-sizing: border-box;
-        background-color: #fafafa;
-    }
-    #map {
-        flex: 1;
-    }
-    .location-item {
-        margin-bottom: 12px;
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-    }
-    
-    
-  </style>
+    <meta charset="UTF-8">
+    <title>dataget test</title>
 </head>
 <body>
-    <div id="sidebar"> 
-        <h2>金沢市混雑マップ</h2>
-    </div>
-    <div id="map"></div>
+    <script>
+    let headersList = {
+        "Accept": "*/*",
+        "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+        "Content-Type": "application/json"
+    }
 
-  <script>
-   let headersList = {
- "Accept": "*/*",
- "User-Agent": "Thunder Client (https://www.thunderclient.com)",
- "Content-Type": "application/json"
-}
+    let bodyContent = JSON.stringify({
+        "mac":"4827e2e3b74c"
+    });
 
-let bodyContent = JSON.stringify({
-  "mac":"4827e2e3b74c"
-});
+    let response = await fetch("https://ifdl.jp/akita/WiScount/getlog.php", { 
+        method: "GET",
+        body: bodyContent,
+        headers: headersList
+    });
 
-let response = await fetch("https://ifdl.jp/akita/WiScount/getlog.php", { 
-  method: "GET",
-  body: bodyContent,
-  headers: headersList
-});
-
-let data = await response.text();
-console.log(data);
-  </script>
-
-  <!-- Google Maps API 読み込み：callbackで initMap を自動実行 -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSsUGfSG2nndTiOuyrYilrZ7gm5YjolQg&callback=initMap&language=ja"></script>
+    let data = await response.text();
+    console.log(data);
+    </script>
 </body>
 </html>
