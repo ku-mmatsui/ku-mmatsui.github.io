@@ -1,1 +1,19 @@
 
+let headersList = {
+ "Accept": "*/*",
+ "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+ "Content-Type": "application/json"
+}
+
+let bodyContent = JSON.stringify({
+  "mac":"4827e2e3b74c"
+});
+
+let response = await fetch("https://ifdl.jp/akita/WiScount/getlog.php", { 
+  method: "GET",
+  body: bodyContent,
+  headers: headersList
+});
+
+let data = await response.text();
+console.log(data);
