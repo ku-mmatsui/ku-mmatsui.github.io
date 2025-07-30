@@ -1,0 +1,179 @@
+<!--サイドバーあり-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>test6</title>
+  <style>
+    body{
+        margin: 0;
+        padding: 0;
+        display: flex;
+        height: 100vh;
+    }
+    #sidebar {
+        width: 300px;
+        overflow-y: auto;
+        border-right: 1px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #fafafa;
+    }
+    #map {
+        flex: 1;
+    }
+    .location-item {
+        margin-bottom: 12px;
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    
+  </style>
+</head>
+<body>
+    <div id="sidebar"> 
+        <h2>金沢市混雑マップ</h2>
+    </div>
+    <div id="map"></div>
+
+  <script>
+    const locations = [
+      {
+        title: "金沢21世紀美術館",
+        position: {lat:36.5610178, lng:136.6585197},
+        address: "〒920-8509 石川県金沢市広坂1丁目2−1",
+	      info: "現代アートが楽しめる美術館",
+        image: "https://www4.city.kanazawa.lg.jp/material/images/group/5/01.jpg",
+        link: "https://maps.app.goo.gl/jeqGQzfB9h5KS5kw7", 
+      },
+      {
+        title: "兼六園",
+        position: {lat:36.5623260, lng:136.6626461},
+        address: "〒920-0936 石川県金沢市兼六町1",
+        info: "加賀藩主によって作られた日本三名園のひとつ",
+        image: "",
+        link: "https://maps.app.goo.gl/myberNVn8mjb3c8e7"
+      },
+      {
+        title: "金沢城公園",
+        position: {lat:36.5661440, lng:136.6588397},
+        address: "〒920-0937 石川県金沢市丸の内1−1",
+        info: "加賀藩前田家の居城跡",
+        image: "",
+        link: "https://maps.app.goo.gl/P4UUF3X16hv6HqB37"
+      },
+      {
+        title: "近江町市場",
+        position: {lat:36.5719316, lng:136.6558382},
+        address: "〒920-0905 石川県金沢市上近江町50",
+        info: "鮮魚や果物などの専門店がある市場",
+        image: "",
+        link: "https://maps.app.goo.gl/iQsCSAEKcjvEvPfc8"
+      },
+      {
+        title: "金沢駅",
+        position: {lat:36.5778841, lng:136.6491358},
+        address: "〒920-0858 石川県金沢市木ノ新保町1",
+        info: "「鼓門」と「もてなしドーム」が特徴",
+        image: "",
+        link: "https://maps.app.goo.gl/2WGo46NuGTpeJ8pr6"
+      },
+      {
+        title: "尾山神社",
+        position: {lat:36.5662110, lng:136.6554624},
+        address: "〒920-0918 石川県金沢市尾山町11−1",
+        info: "加賀藩祖前田利家公と正室お松の方を祀る神社",
+        image: "",
+        link: "https://maps.app.goo.gl/X6UVhSFNNp7ZMY5u7"
+      },
+      {
+        title: "長町武家屋敷跡",
+        position: {lat:36.5637638, lng:136.6511256},
+        address: "〒920-0865 石川県金沢市長町1丁目3−12−2",
+        info: "加賀藩士・中級武士たちの屋敷跡",
+        image: "",
+        link: "https://maps.app.goo.gl/gqNQBjMnQeUwAteF7"
+      },
+      {
+        title: "ひがし茶屋街",
+        position: {lat:36.5729701437311, lng:136.6655972588559},
+        address: "〒920-0831 石川県金沢市東山1",
+        info: "国の重要伝統的建造物群保存地区である茶屋街",
+        image: "",
+        link: "https://maps.app.goo.gl/BUBJQpzpVZ9RgwqY6"
+      }
+    ];
+
+    let activeInfoWindow = null;
+    //開かれている吹き出しをnullとする。marker.addListenerに影響
+
+    //マップを表示させる
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 36.568170, lng: 136.657744 },
+        zoom: 15
+      });
+      
+      const sidebar = document.getElementById('sidebar');
+
+      locations.forEach(loc => {
+        const marker = new google.maps.Marker({
+          position: loc.position,
+          map: map,
+        });
+
+        // 吹き出し設定
+        const infoWindow = new google.maps.InfoWindow({
+            content: `
+                <div>
+                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${loc.title}</div>
+                    <img src="${loc.image}" alt="${loc.title}" style="width: 100%; height: auto;"><br>
+                    <div style= "margin-top: auto;">${loc.info}<br>
+                    <strong>混雑状況:</strong><br>
+                    ${loc.address}<br>
+                    <a href= "${loc.link}"> Googleマップで見る </a>
+                </div>
+            `
+        });
+        
+        //マーカー選択後に吹き出し表示
+        marker.addListener("click", () => {
+          if (activeInfoWindow)activeInfoWindow.close();
+          infoWindow.open(map, marker);
+          activeInfoWindow = infoWindow;
+        });
+
+        infoWindow.addListener('closeclick', () => {
+          activeInfoWindow = null;
+        });
+
+        //sidebarの要素設定
+        const item = document.createElement("div");
+        item.className = "location-item";
+        item.innerHTML = `
+          <div class="location-title"><strong>${loc.title}</strong></div>
+          <div class="location-address">${loc.address}</div>
+        `;
+        item.addEventListener("click", () => {
+          map.panTo(loc.position);
+          if (activeInfoWindow) activeInfoWindow.close();
+          infoWindow.open(map, marker);
+          activeInfoWindow = infoWindow;
+        });
+
+        sidebar.appendChild(item);
+
+      });
+    }
+
+//コピペ
+
+    window.initMap = initMap;
+  </script>
+
+  <!-- Google Maps API 読み込み：callbackで initMap を自動実行 -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSsUGfSG2nndTiOuyrYilrZ7gm5YjolQg&callback=initMap&language=ja"></script>
+</body>
+</html>
