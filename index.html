@@ -10,11 +10,10 @@
         let headersList = {
             "Accept": "*/*",
             "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-            "Content-Type": "application/json"
+            "Content-Type": "text/plain"
         };
 
-        let mac = "4827e2e3b74c";
-        let url = `https://ifdl.jp/akita/WiScount/getlog.php?mac=${mac}`;
+        let url = `https://ifdl.jp/akita/WiScount/getlog.php?mac=4827e2e3b74c`;
 
         let response = await fetch(url, { 
             method: "GET",
