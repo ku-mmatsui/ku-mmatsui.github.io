@@ -1,0 +1,54 @@
+<!--dataget6 test確定版からcountの情報だけ画面上に表示。完成-->
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>countのみ画面上に表示</title>
+</head>
+
+<body>
+    <h3>サーバーからの結果：</h3>
+    <div class="item">カウント：<span id="count"></span>人</div>
+    <div class="item"><span id="hour"></span>時<span id="minutes"></span>分現在</div>
+    
+    <script>
+        async function getData() {
+            try {
+                let headersList = {
+                    "Accept": "*/*",
+                    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+                    "Content-Type": "text/plain"
+                }
+
+                let bodyContent = JSON.stringify({
+                    "mac": "4827e2e3b74c"
+                });
+
+                let response = await fetch("https://ifdl.jp/akita/WiScount/getlog.php", {
+                    method: "POST",
+                    body: bodyContent,
+                    headers: headersList
+                });
+
+                let data = await response.json();//jsonとして表示
+                //await response.textだからtext形式で画面上に表示される。jsonにしたらJSON形式
+                console.log(data); //開発者コンソールでの確認用
+
+
+                //画面上に表示
+                document.getElementById("count").textContent = data.Count;
+                document.getElementById("hour").textContent = data.Hour;
+                document.getElementById("minutes").textContent = data.Min;
+                //JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById("count").textContent = "エラー:" + error;
+                document.getElementById("hour").textContent = "エラー:" + error;
+                document.getElementById("minutes").textContent = "エラー:" + error;
+            }
+        }
+        getData();
+    </script>
+</body>
+
+</html>
