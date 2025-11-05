@@ -127,9 +127,9 @@
                             document.getElementById("Min").textContent = data.Min;
                             //JSON.stringify(data, null, 2);
                         } catch (error) {
-                            document.getElementById("Count").textContent = "エラー:" + err;
-                            document.getElementById("Hour").textContent = "エラー:" + err;
-                            document.getElementById("Min").textContent = "エラー:" + err;
+                            document.getElementById("Count").textContent = "エラー:" + error;
+                            document.getElementById("Hour").textContent = "エラー:" + error;
+                            document.getElementById("Min").textContent = "エラー:" + error;
                         }
                     }
                     getData();
@@ -171,5 +171,6 @@
         </script>
 </body>
 </html>
+
 
 
